@@ -23,16 +23,16 @@ const tokenDecode = (req) => {
 	}
 };
 
-exports.verifyToken = async (req, res, next) {
-    const tokenDecoded = tokenDecode(req)
-    console.log('verifyToken', tokenDecoded)
-    
-    if(tokenDecoded) {
-        const user = await User.findById(tokenDecoded.id)
-        if(!user) return res.status(401).json('Unauthorized')
-        req.user = user
-        next()
-    } else {
-        res.status(401).json('Unauthorized')
-    }
-}
+exports.verifyToken = async (req, res, next) => {
+	const tokenDecoded = tokenDecode(req);
+	console.log('verifyToken', tokenDecoded);
+
+	if (tokenDecoded) {
+		const user = await User.findById(tokenDecoded.id);
+		if (!user) return res.status(401).json('Unauthorized');
+		req.user = user;
+		next();
+	} else {
+		res.status(401).json('Unauthorized');
+	}
+};
