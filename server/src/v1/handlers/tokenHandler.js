@@ -33,6 +33,6 @@ exports.verifyToken = async (req, res, next) {
         req.user = user
         next()
     } else {
-        if(!user) return res.status(401).json('Unauthorized')
+        res.status(401).json('Unauthorized')
     }
 }
