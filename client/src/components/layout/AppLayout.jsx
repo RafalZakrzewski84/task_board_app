@@ -10,8 +10,7 @@ import Sidebar from '../common/Sidebar';
 
 const AppLayout = () => {
 	const navigate = useNavigate();
-	//set to false to artificially turn off loader
-	const [loading, setLoading] = useState(false);
+	const [loading, setLoading] = useState(true);
 
 	useEffect(() => {
 		const checkAuth = async () => {
@@ -21,8 +20,8 @@ const AppLayout = () => {
 			} else {
 				setLoading(false);
 			}
-			checkAuth();
 		};
+		checkAuth();
 	}, [navigate]);
 
 	return loading ? (

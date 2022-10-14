@@ -10,7 +10,7 @@ import assets from '../../assets/index';
 
 const AuthLayout = () => {
 	const navigate = useNavigate();
-	const [loading, setLoading] = useState(false);
+	const [loading, setLoading] = useState(true);
 
 	useEffect(() => {
 		const checkAuth = async () => {
@@ -20,8 +20,8 @@ const AuthLayout = () => {
 			} else {
 				navigate('/');
 			}
-			checkAuth();
 		};
+		checkAuth();
 	}, [navigate]);
 
 	return loading ? (
