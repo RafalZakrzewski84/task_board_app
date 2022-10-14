@@ -1,7 +1,8 @@
 /** @format */
 
 import { useState } from 'react';
-import { Box, TextField } from '@mui/material';
+import { Link } from 'react-router-dom';
+import { Box, Button, TextField } from '@mui/material';
 import LoadingButton from '@mui/lab/LoadingButton';
 
 const Login = () => {
@@ -40,6 +41,9 @@ const Login = () => {
 					Login
 				</LoadingButton>
 			</Box>
+			<Button component={Link} to="/signup" sx={{ textTransform: 'none' }}>
+				Don't have an account? Signup
+			</Button>
 		</>
 	);
 };
