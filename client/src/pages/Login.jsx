@@ -17,7 +17,7 @@ const Login = () => {
 					required
 					fullWidth
 					id="username"
-					label="Username"
+					label="username"
 					name="username"
 					disabled={loading}
 				/>
