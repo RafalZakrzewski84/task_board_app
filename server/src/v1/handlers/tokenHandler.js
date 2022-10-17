@@ -4,7 +4,6 @@ const jsonwebtoken = require('jsonwebtoken');
 const User = require('../models/users');
 
 const tokenDecode = (req) => {
-	console.log('tokenHandler', req.headers);
 	const bearerHeader = req.headers['authorization'];
 	if (bearerHeader) {
 		const bearer = bearerHeader.split(' ')[1];
@@ -25,7 +24,6 @@ const tokenDecode = (req) => {
 
 exports.verifyToken = async (req, res, next) => {
 	const tokenDecoded = tokenDecode(req);
-	console.log('verifyToken', tokenDecoded);
 
 	if (tokenDecoded) {
 		const user = await User.findById(tokenDecoded.id);

@@ -5,7 +5,6 @@ const CryptoJS = require('crypto-js');
 const jsonwebtoken = require('jsonwebtoken');
 
 exports.register = async (req, res) => {
-	console.log('register', req.body);
 	const { password } = req.body;
 	try {
 		req.body.password = CryptoJS.AES.encrypt(
@@ -42,7 +41,7 @@ exports.login = async (req, res) => {
 		}
 
 		const decryptedPassword = CryptoJS.AES.decrypt(
-			password,
+			user.password,
 			process.env.PASSWORD_SECRET_KEY
 		).toString(CryptoJS.enc.Utf8);
 
