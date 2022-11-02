@@ -37,7 +37,7 @@ const AuthLayout = () => {
 				}}>
 				<img
 					src={assets.images.logoDark}
-					style={{ width: '100px' }}
+					style={{ width: '200px' }}
 					alt="app Logo"
 				/>
 				<Outlet />
