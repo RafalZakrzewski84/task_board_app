@@ -12,6 +12,7 @@ import {
 	Typography,
 } from '@mui/material';
 import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
+import AddBoxOutlinedIcon from '@mui/icons-material/AddBoxOutlined';
 
 import assets from '../../assets/index';
 
@@ -59,6 +60,37 @@ const Sidebar = () => {
 						</IconButton>
 					</Box>
 				</ListItem>
+				<Box sx={{ paddingTop: '10px' }}>
+					<ListItem>
+						<Box
+							sx={{
+								width: '100%',
+								display: 'flex',
+								alignItems: 'center',
+								justifyContent: 'space-between',
+							}}>
+							<Typography variant="body2" fontWeight="700">
+								Favorite
+							</Typography>
+						</Box>
+					</ListItem>
+					<ListItem>
+						<Box
+							sx={{
+								width: '100%',
+								display: 'flex',
+								alignItems: 'center',
+								justifyContent: 'space-between',
+							}}>
+							<Typography variant="body2" fontWeight="700">
+								Privet
+							</Typography>
+							<IconButton>
+								<AddBoxOutlinedIcon fontSize="small" />
+							</IconButton>
+						</Box>
+					</ListItem>
+				</Box>
 			</List>
 		</Drawer>
 	);
