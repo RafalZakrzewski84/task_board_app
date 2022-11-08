@@ -5,7 +5,7 @@ import { createSlice } from '@reduxjs/toolkit';
 const initialState = { value: [] };
 
 export const boardSlice = createSlice({
-	name: 'board',
+	name: 'boards',
 	initialState,
 	reducers: {
 		setBoards: (state, action) => {
