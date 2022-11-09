@@ -55,7 +55,26 @@ const Sidebar = () => {
 		navigate('/login');
 	};
 
-	const onDragEnd = () => {};
+	const onDragEnd = async ({ source, destination }) => {
+		const newBoardsList = [...boards];
+		const [removed] = newBoardsList.splice(source.index, 1);
+		newBoardsList.splice(destination.index, 0, removed);
+
+		const activeBoard = newBoardsList.findIndex(
+			(board) => board._id === boardId
+		);
+		setActiveBoardIndex(activeBoard);
+		dispatch(setBoards(newBoardsList));
+
+		try {
+			console.log('original boards', boards);
+			console.log('newBoardsList', newBoardsList);
+			await boardsApi.updateBoardPosition({ boards: newBoardsList });
+			console.log('new list sent to db through');
+		} catch (error) {
+			console.log(error);
+		}
+	};
 
 	return (
 		<Drawer
@@ -159,6 +178,7 @@ const Sidebar = () => {
 										)}
 									</Draggable>
 								))}
+								{provided.placeholder}
 							</div>
 						)}
 					</Droppable>
