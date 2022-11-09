@@ -25,3 +25,18 @@ exports.getAllBoards = async (req, res) => {
 		res.status(500).json(error);
 	}
 };
+
+exports.updateBoardPosition = async (req, res) => {
+	const { boards } = req.body;
+	console.log('board in controller', boards);
+	try {
+		for (const key in boards.reverse()) {
+			const board = boards[key];
+			await Board.findByIdAndUpdate(board.id, { $set: { position: key } });
+		}
+		console.log('positions updated msg from boars controller');
+		res.status(201).json(boards);
+	} catch (error) {
+		res.status(500).json(error);
+	}
+};

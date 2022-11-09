@@ -10,4 +10,6 @@ router.post('/', tokenHandler.verifyToken, boardController.createBoard);
 
 router.get('/', tokenHandler.verifyToken, boardController.getAllBoards);
 
+router.put('/', tokenHandler.verifyToken, boardController.updateBoardPosition);
+
 module.exports = router;
