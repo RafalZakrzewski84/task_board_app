@@ -9,7 +9,7 @@ export const boardSlice = createSlice({
 	initialState,
 	reducers: {
 		setBoards: (state, action) => {
-			state.value = action.value;
+			state.value = action.payload;
 		},
 	},
 });

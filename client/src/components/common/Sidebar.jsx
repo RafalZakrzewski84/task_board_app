@@ -1,8 +1,8 @@
 /** @format */
 
 import { useSelector, useDispatch } from 'react-redux';
-import { useNavigate, useParams } from 'react-router-dom';
-import { useEffect } from 'react';
+import { Link, useNavigate, useParams } from 'react-router-dom';
+import { useEffect, useState } from 'react';
 
 import {
 	Drawer,
@@ -11,9 +11,11 @@ import {
 	IconButton,
 	ListItem,
 	Typography,
+	ListItemButton,
 } from '@mui/material';
 import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
 import AddBoxOutlinedIcon from '@mui/icons-material/AddBoxOutlined';
+import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
 
 import assets from '../../assets/index';
 import boardsApi from '../../api/boardsApi';
@@ -25,6 +27,7 @@ const Sidebar = () => {
 	const navigate = useNavigate();
 	const { boardId } = useParams();
 	const dispatch = useDispatch();
+	const [activeBoardIndex, setActiveBoardIndex] = useState(0);
 	const sidebarWidth = 250;
 
 	useEffect(() => {
@@ -32,24 +35,27 @@ const Sidebar = () => {
 			try {
 				const res = await boardsApi.getAllBoards();
 				dispatch(setBoards(res));
-				if (res.length > 0 && boardId === undefined) {
-					navigate(`/boards/${res[0]._id}`);
-				}
 			} catch (err) {
 				console.log(err);
 			}
 		};
 		getBoards();
-	}, []);
+	}, [dispatch]);
 
 	useEffect(() => {
-		console.log(boards);
-	}, [boards]);
+		const activeBoard = boards.findIndex((board) => board._id === boardId);
+		setActiveBoardIndex(activeBoard);
+		if (boards.length > 0 && boardId === undefined) {
+			navigate(`/boards/${boards[0]._id}`);
+		}
+	}, [boards, boardId, navigate]);
 
 	const logout = () => {
 		localStorage.removeItem('token');
 		navigate('/login');
 	};
+
+	const onDragEnd = () => {};
 
 	return (
 		<Drawer
@@ -84,37 +90,79 @@ const Sidebar = () => {
 						</IconButton>
 					</Box>
 				</ListItem>
-				<Box sx={{ paddingTop: '10px' }}>
-					<ListItem>
-						<Box
-							sx={{
-								width: '100%',
-								display: 'flex',
-								alignItems: 'center',
-								justifyContent: 'space-between',
-							}}>
-							<Typography variant="body2" fontWeight="700">
-								Favorite
-							</Typography>
-						</Box>
-					</ListItem>
-					<ListItem>
-						<Box
-							sx={{
-								width: '100%',
-								display: 'flex',
-								alignItems: 'center',
-								justifyContent: 'space-between',
-							}}>
-							<Typography variant="body2" fontWeight="700">
-								Privet
-							</Typography>
-							<IconButton>
-								<AddBoxOutlinedIcon fontSize="small" />
-							</IconButton>
-						</Box>
-					</ListItem>
-				</Box>
+				<Box sx={{ paddingTop: '10px' }} />
+				<ListItem>
+					<Box
+						sx={{
+							width: '100%',
+							display: 'flex',
+							alignItems: 'center',
+							justifyContent: 'space-between',
+						}}>
+						<Typography variant="body2" fontWeight="700">
+							Favorite
+						</Typography>
+					</Box>
+				</ListItem>
+				<ListItem>
+					<Box
+						sx={{
+							width: '100%',
+							display: 'flex',
+							alignItems: 'center',
+							justifyContent: 'space-between',
+						}}>
+						<Typography variant="body2" fontWeight="700">
+							Privet
+						</Typography>
+						<IconButton>
+							<AddBoxOutlinedIcon fontSize="small" />
+						</IconButton>
+					</Box>
+				</ListItem>
+				<DragDropContext onDragEnd={onDragEnd}>
+					<Droppable
+						key={'list-board-droppable'}
+						droppableId={'list-board-droppable'}>
+						{(provided) => (
+							<div ref={provided.innerRef} {...provided.droppableProps}>
+								{boards.map((board, idx) => (
+									<Draggable
+										key={board._id}
+										draggableId={board._id}
+										index={idx}>
+										{(provided, snapshot) => (
+											<ListItemButton
+												ref={provided.innerRef}
+												{...provided.dragHandleProps}
+												{...provided.draggableProps}
+												selected={idx === activeBoardIndex}
+												component={Link}
+												to={`/boards/${board._id}`}
+												sx={{
+													pl: '20px',
+													cursor: snapshot.isDragging
+														? 'grab'
+														: 'pointer!important',
+												}}>
+												<Typography
+													variant="body2"
+													fontWeight="700"
+													sx={{
+														whiteSpace: 'nowrap',
+														overflow: 'hidden',
+														textOverflow: 'ellipsis',
+													}}>
+													{board.icon} {board.title}
+												</Typography>
+											</ListItemButton>
+										)}
+									</Draggable>
+								))}
+							</div>
+						)}
+					</Droppable>
+				</DragDropContext>
 			</List>
 		</Drawer>
 	);
