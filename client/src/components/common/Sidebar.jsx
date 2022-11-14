@@ -55,6 +55,18 @@ const Sidebar = () => {
 		navigate('/login');
 	};
 
+	const addBoard = async () => {
+		try {
+			const res = await boardsApi.createBoard();
+			console.log(res);
+			const newBoardsList = [res, ...boards];
+			dispatch(setBoards(newBoardsList));
+			navigate(`/boards/${res.id}`);
+		} catch (error) {
+			console.log(error);
+		}
+	};
+
 	const onDragEnd = async ({ source, destination }) => {
 		const newBoardsList = [...boards];
 		const [removed] = newBoardsList.splice(source.index, 1);
@@ -134,7 +146,7 @@ const Sidebar = () => {
 						<Typography variant="body2" fontWeight="700">
 							Privet
 						</Typography>
-						<IconButton>
+						<IconButton onClick={addBoard}>
 							<AddBoxOutlinedIcon fontSize="small" />
 						</IconButton>
 					</Box>
