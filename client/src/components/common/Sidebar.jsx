@@ -58,10 +58,9 @@ const Sidebar = () => {
 	const addBoard = async () => {
 		try {
 			const res = await boardsApi.createBoard();
-			console.log(res);
 			const newBoardsList = [res, ...boards];
 			dispatch(setBoards(newBoardsList));
-			navigate(`/boards/${res.id}`);
+			navigate(`/boards/${res._id}`);
 		} catch (error) {
 			console.log(error);
 		}

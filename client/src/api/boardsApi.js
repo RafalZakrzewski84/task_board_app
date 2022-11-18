@@ -8,7 +8,9 @@ const boardsApi = {
 	updateBoardPosition: (params) => {
 		axiosClient.put('boards', params);
 	},
-	getOneBoard: (boardId) => axiosClient.get(`boards/${boardId}`),
+	getOneBoard: (boardId) => {
+		return axiosClient.get(`boards/${boardId}`);
+	},
 };
 
 export default boardsApi;

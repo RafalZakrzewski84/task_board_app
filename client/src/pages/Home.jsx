@@ -19,7 +19,7 @@ const Home = () => {
 			setLoading(true);
 			const res = await boardsApi.createBoard();
 			dispatch(setBoards([res]));
-			navigate(`/boards/${res.id}`);
+			navigate(`/boards/${res._id}`);
 		} catch (error) {
 			console.log(error);
 		} finally {
