@@ -2,9 +2,11 @@
 
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { Box } from '@mui/material';
+import { emojiPicker } from 'emoji-mart';
+import { Box, IconButton } from '@mui/material';
 import StarOutlinedIcon from '@mui/icons-material/StarOutlined';
 import StarBorderOutlinedIcon from '@mui/icons-material/StarBorderOutlined';
+import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutline';
 
 import boardsApi from '../api/boardsApi';
 
@@ -25,7 +27,6 @@ const Board = () => {
 				setSections([...res.sections]);
 				setIsFavorite(res.favorite);
 				setIcon(res.icon);
-				console.log(res);
 			} catch (error) {
 				console.log(error);
 			}
@@ -35,7 +36,24 @@ const Board = () => {
 
 	return (
 		<>
-			<Box sx={{}}></Box>
+			<Box
+				sx={{
+					display: 'flex',
+					alignItems: 'center',
+					justifyContent: 'space-between',
+					width: '100%',
+				}}>
+				<IconButton variant="outlined">
+					{isFavorite ? (
+						<StarOutlinedIcon color="warning" />
+					) : (
+						<StarBorderOutlinedIcon />
+					)}
+				</IconButton>
+				<IconButton variant="outlined" color="error">
+					<DeleteOutlinedIcon />
+				</IconButton>
+			</Box>
 		</>
 	);
 };
