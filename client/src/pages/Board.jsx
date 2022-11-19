@@ -2,8 +2,15 @@
 
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { emojiPicker } from 'emoji-mart';
-import { Box, IconButton } from '@mui/material';
+// import { EmojiPicker } from 'emoji-mart';
+import {
+	Box,
+	IconButton,
+	TextField,
+	Typography,
+	Button,
+	Divider,
+} from '@mui/material';
 import StarOutlinedIcon from '@mui/icons-material/StarOutlined';
 import StarBorderOutlinedIcon from '@mui/icons-material/StarBorderOutlined';
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutline';
@@ -53,6 +60,53 @@ const Board = () => {
 				<IconButton variant="outlined" color="error">
 					<DeleteOutlinedIcon />
 				</IconButton>
+			</Box>
+			<Box sx={{ padding: '10px 50px' }}>
+				<Box>
+					{/* emoji */}
+					<TextField
+						value={title}
+						placeholder="Untitled"
+						variant="outlined"
+						fullWidth
+						sx={{
+							'& .MuiOutlinedInput-input': { padding: 0 },
+							'& .MuiOutlinedInput-notchedOutline': { border: 'none' },
+							'& .MuiOutlinedInput-root': {
+								fontSize: '2rem',
+								fontWeight: '700',
+							},
+						}}
+					/>
+					<TextField
+						value={description}
+						placeholder="Add a description"
+						variant="outlined"
+						multiline
+						fullWidth
+						sx={{
+							'& .MuiOutlinedInput-input': { padding: 0 },
+							'& .MuiOutlinedInput-notchedOutline': { border: 'none' },
+							'& .MuiOutlinedInput-root': { fontSize: '0.8rem' },
+						}}
+					/>
+				</Box>
+
+				<Box>
+					<Box
+						sx={{
+							display: 'flex',
+							alignItems: 'center',
+							justifyContent: 'space-between',
+						}}>
+						<Button>Add Section</Button>
+						<Typography variant="body2" fontWeight="700">
+							{sections.length} Sections
+						</Typography>
+					</Box>
+				</Box>
+				<Divider sx={{ margin: '10px 0' }} />
+				{/* taskboard */}
 			</Box>
 		</>
 	);
