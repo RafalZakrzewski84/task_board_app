@@ -58,3 +58,41 @@ exports.getOneBoard = async (req, res) => {
 		res.status(500).json(error);
 	}
 };
+
+exports.updateBoard = async (req, res) => {
+	const { boardId } = req.params;
+	const { title, description, favorite } = req.body;
+
+	try {
+		if (title === '') req.body.title = 'undefined';
+		if (description === '') req.body.description = 'Add description here';
+		const currentBoard = await Board.findById({ boardId });
+
+		if (!currentBoard) return res.stats(404).json('Board not found');
+
+		if (favorite !== undefined && currentBoard.favorite !== favorite) {
+			const favorites = await Board.find({
+				user: currentBoard.user,
+				favorite: true,
+				_id: { $ne: boardId },
+			});
+		}
+
+		if (favorite) {
+			req.body.favoritePosition = favorites.length > 0 ? favorite.length : 0;
+		} else {
+			for (const key in favorites) {
+				const element = favorites[key];
+				await Board.findByIdAndUpdate(element.id, {
+					$set: { favoritePosition: key },
+				});
+			}
+		}
+
+		const board = await Board.findByIdAndUpdate(boardId, { $set: req.body });
+
+		res.status(200).json(board);
+	} catch (error) {
+		res.status(500).json(error);
+	}
+};

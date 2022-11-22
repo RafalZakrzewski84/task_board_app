@@ -14,7 +14,7 @@ const boardSchema = Schema(
 		},
 		icon: {
 			type: String,
-			default: '#',
+			default: '📃',
 		},
 		title: {
 			type: String,
