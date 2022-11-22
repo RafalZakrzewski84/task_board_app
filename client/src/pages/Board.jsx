@@ -1,6 +1,7 @@
 /** @format */
 
 import { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import {
 	Box,
@@ -15,15 +16,19 @@ import StarBorderOutlinedIcon from '@mui/icons-material/StarBorderOutlined';
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutline';
 
 import boardsApi from '../api/boardsApi';
+import { setBoards } from '../redux/features/boardSlice';
 import EmojiPicker from '../components/common/EmojiPicker';
 
 const Board = () => {
+	const dispatch = useDispatch();
 	const { boardId } = useParams();
 	const [title, setTitle] = useState('');
 	const [description, setDescription] = useState('');
 	const [sections, setSections] = useState([]);
 	const [isFavorite, setIsFavorite] = useState(false);
 	const [icon, setIcon] = useState('');
+
+	const boards = useSelector((state) => state.boards.value);
 
 	useEffect(() => {
 		const getBoard = async () => {
@@ -41,8 +46,17 @@ const Board = () => {
 		getBoard();
 	}, [boardId]);
 
-	const onIconChange = (newIcon) => {
+	const onIconChange = async (newIcon) => {
 		setIcon(newIcon);
+		const tempBoards = [...boards];
+		const index = tempBoards.findIndex((board) => board._id === boardId);
+		tempBoards[index] = { ...tempBoards[index], icon: newIcon };
+		dispatch(setBoards(tempBoards));
+		try {
+			await boardsApi.updateBoard(boardId, { icon: newIcon });
+		} catch (error) {
+			console.log(error);
+		}
 	};
 
 	return (
