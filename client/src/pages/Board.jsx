@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-// import { EmojiPicker } from 'emoji-mart';
 import {
 	Box,
 	IconButton,
@@ -16,6 +15,7 @@ import StarBorderOutlinedIcon from '@mui/icons-material/StarBorderOutlined';
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutline';
 
 import boardsApi from '../api/boardsApi';
+import EmojiPicker from '../components/common/EmojiPicker';
 
 const Board = () => {
 	const { boardId } = useParams();
@@ -41,6 +41,10 @@ const Board = () => {
 		getBoard();
 	}, [boardId]);
 
+	const onIconChange = (newIcon) => {
+		setIcon(newIcon);
+	};
+
 	return (
 		<>
 			<Box
@@ -63,7 +67,7 @@ const Board = () => {
 			</Box>
 			<Box sx={{ padding: '10px 50px' }}>
 				<Box>
-					{/* emoji */}
+					<EmojiPicker icon={icon} onChange={onIconChange} />
 					<TextField
 						value={title}
 						placeholder="Untitled"
