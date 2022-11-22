@@ -41,6 +41,7 @@ exports.updateBoardPosition = async (req, res) => {
 
 exports.getOneBoard = async (req, res) => {
 	const { boardId } = req.params;
+	console.log(boardId);
 	try {
 		const board = await Board.findOne({ user: req.user._id, _id: boardId });
 		if (!board) return res.status(404).json('Board not found');
@@ -66,12 +67,13 @@ exports.updateBoard = async (req, res) => {
 	try {
 		if (title === '') req.body.title = 'undefined';
 		if (description === '') req.body.description = 'Add description here';
-		const currentBoard = await Board.findById({ boardId });
+		const currentBoard = await Board.findById(boardId);
 
 		if (!currentBoard) return res.stats(404).json('Board not found');
 
+		let favorites;
 		if (favorite !== undefined && currentBoard.favorite !== favorite) {
-			const favorites = await Board.find({
+			favorites = await Board.find({
 				user: currentBoard.user,
 				favorite: true,
 				_id: { $ne: boardId },
@@ -88,7 +90,6 @@ exports.updateBoard = async (req, res) => {
 				});
 			}
 		}
-
 		const board = await Board.findByIdAndUpdate(boardId, { $set: req.body });
 
 		res.status(200).json(board);

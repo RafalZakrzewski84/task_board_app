@@ -78,10 +78,7 @@ const Sidebar = () => {
 		dispatch(setBoards(newBoardsList));
 
 		try {
-			console.log('original boards', boards);
-			console.log('newBoardsList', newBoardsList);
 			await boardsApi.updateBoardPosition({ boards: newBoardsList });
-			console.log('new list sent to db through');
 		} catch (error) {
 			console.log(error);
 		}
