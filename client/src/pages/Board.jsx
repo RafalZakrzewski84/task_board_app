@@ -98,6 +98,15 @@ const Board = () => {
 		}, TIMEOUT);
 	};
 
+	const updateFavorite = async (e) => {
+		try {
+			await boardsApi.updateBoard(boardId, { favorite: !isFavorite });
+			setIsFavorite(!isFavorite);
+		} catch (error) {
+			console.log(error);
+		}
+	};
+
 	return (
 		<>
 			<Box
@@ -107,7 +116,7 @@ const Board = () => {
 					justifyContent: 'space-between',
 					width: '100%',
 				}}>
-				<IconButton variant="outlined">
+				<IconButton variant="outlined" onClick={updateFavorite}>
 					{isFavorite ? (
 						<StarOutlinedIcon color="warning" />
 					) : (
