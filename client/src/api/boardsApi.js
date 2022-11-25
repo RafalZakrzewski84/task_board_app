@@ -11,6 +11,7 @@ const boardsApi = {
 	getOneBoard: (boardId) => axiosClient.get(`boards/${boardId}`),
 	updateBoard: (boardId, params) =>
 		axiosClient.put(`boards/${boardId}`, params),
+	getFavoriteBoards: () => axiosClient.get('boards/favorite'),
 };
 
 export default boardsApi;
