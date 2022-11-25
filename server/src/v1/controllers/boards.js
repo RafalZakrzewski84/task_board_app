@@ -81,7 +81,7 @@ exports.updateBoard = async (req, res) => {
 		}
 
 		if (favorite) {
-			req.body.favoritePosition = favorites.length > 0 ? favorite.length : 0;
+			req.body.favoritePosition = favorites.length > 0 ? favorites.length : 0;
 		} else {
 			for (const key in favorites) {
 				const element = favorites[key];
@@ -95,5 +95,17 @@ exports.updateBoard = async (req, res) => {
 		res.status(200).json(board);
 	} catch (error) {
 		res.status(500).json(error);
+	}
+};
+
+exports.getFavoriteBoards = async (req, res) => {
+	try {
+		const favoriteBoards = await Board.find({
+			user: req.user._id,
+			favorite: true,
+		}).sort('-favoritePosition');
+		res.status(200).json(favoriteBoards);
+	} catch (error) {
+		res.stats(500).json(error);
 	}
 };

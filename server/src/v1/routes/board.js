@@ -13,6 +13,12 @@ router.get('/', tokenHandler.verifyToken, boardController.getAllBoards);
 router.put('/', tokenHandler.verifyToken, boardController.updateBoardPosition);
 
 router.get(
+	'/favorites',
+	tokenHandler.verifyToken,
+	boardController.getFavoriteBoards
+);
+
+router.get(
 	'/:boardId',
 	param('boardId').custom((value) => {
 		if (!validation.isObjectId(value)) {
