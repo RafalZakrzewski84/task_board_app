@@ -20,6 +20,7 @@ import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
 import assets from '../../assets/index';
 import boardsApi from '../../api/boardsApi';
 import { setBoards } from '../../redux/features/boardSlice';
+import FavoriteBoards from './FavoriteBoards';
 
 const Sidebar = () => {
 	const user = useSelector((state) => state.user.value);
@@ -118,19 +119,7 @@ const Sidebar = () => {
 					</Box>
 				</ListItem>
 				<Box sx={{ paddingTop: '10px' }} />
-				<ListItem>
-					<Box
-						sx={{
-							width: '100%',
-							display: 'flex',
-							alignItems: 'center',
-							justifyContent: 'space-between',
-						}}>
-						<Typography variant="body2" fontWeight="700">
-							Favorite
-						</Typography>
-					</Box>
-				</ListItem>
+				<FavoriteBoards />
 				<ListItem>
 					<Box
 						sx={{
