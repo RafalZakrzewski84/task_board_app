@@ -31,7 +31,7 @@ exports.updateBoardPosition = async (req, res) => {
 	try {
 		for (const key in boards.reverse()) {
 			const board = boards[key];
-			await Board.findByIdAndUpdate(board.id, { $set: { position: key } });
+			await Board.findByIdAndUpdate(board._id, { $set: { position: key } });
 		}
 		res.status(201).json(boards);
 	} catch (error) {
@@ -115,7 +115,7 @@ exports.updateFavoritePosition = async (req, res) => {
 	try {
 		for (const key in boards.reverse()) {
 			const board = boards[key];
-			await Board.findByIdAndUpdate(board.id, {
+			await Board.findByIdAndUpdate(board._id, {
 				$set: { favoritePosition: key },
 			});
 		}
