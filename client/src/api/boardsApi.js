@@ -12,6 +12,8 @@ const boardsApi = {
 	updateBoard: (boardId, params) =>
 		axiosClient.put(`boards/${boardId}`, params),
 	getFavoriteBoards: () => axiosClient.get('boards/favorites'),
+	updateFavoritePosition: (params) =>
+		axiosClient.put('boards/favorites', params),
 };
 
 export default boardsApi;
