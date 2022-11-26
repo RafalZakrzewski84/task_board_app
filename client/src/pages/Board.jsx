@@ -17,6 +17,7 @@ import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutline';
 
 import boardsApi from '../api/boardsApi';
 import { setBoards } from '../redux/features/boardSlice';
+import { setFavorites } from '../redux/features/favoritesSlice';
 import EmojiPicker from '../components/common/EmojiPicker';
 
 let timer;
@@ -32,6 +33,7 @@ const Board = () => {
 	const [icon, setIcon] = useState('');
 
 	const boards = useSelector((state) => state.boards.value);
+	const favoriteBoards = useSelector((state) => state.favorites.value);
 
 	useEffect(() => {
 		const getBoard = async () => {
@@ -55,6 +57,19 @@ const Board = () => {
 		const index = tempBoards.findIndex((board) => board._id === boardId);
 		tempBoards[index] = { ...tempBoards[index], icon: newIcon };
 		dispatch(setBoards(tempBoards));
+
+		if (isFavorite) {
+			const tempFavorites = [...favoriteBoards];
+			const favoriteIndex = tempFavorites.findIndex(
+				(favorite) => favorite._id === boardId
+			);
+			tempFavorites[favoriteIndex] = {
+				...tempFavorites[favoriteIndex],
+				icon: newIcon,
+			};
+			dispatch(setFavorites(tempFavorites));
+		}
+
 		try {
 			await boardsApi.updateBoard(boardId, { icon: newIcon });
 		} catch (error) {
@@ -70,6 +85,18 @@ const Board = () => {
 		const index = tempBoards.findIndex((board) => board._id === boardId);
 		tempBoards[index] = { ...tempBoards[index], title: newTitle };
 		dispatch(setBoards(tempBoards));
+
+		if (isFavorite) {
+			const tempFavorites = [...favoriteBoards];
+			const favoriteIndex = tempFavorites.findIndex(
+				(favorite) => favorite._id === boardId
+			);
+			tempFavorites[favoriteIndex] = {
+				...tempFavorites[favoriteIndex],
+				title: newTitle,
+			};
+			dispatch(setFavorites(tempFavorites));
+		}
 
 		timer = setTimeout(async () => {
 			try {
