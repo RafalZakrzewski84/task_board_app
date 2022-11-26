@@ -109,3 +109,18 @@ exports.getFavoriteBoards = async (req, res) => {
 		res.stats(500).json(error);
 	}
 };
+
+exports.updateFavoritePosition = async (req, res) => {
+	const { boards } = req.body;
+	try {
+		for (const key in boards.reverse()) {
+			const board = boards[key];
+			await Board.findByIdAndUpdate(board.id, {
+				$set: { favoritePosition: key },
+			});
+		}
+		res.status(201).json(boards);
+	} catch (error) {
+		res.status(500).json(error);
+	}
+};

@@ -18,6 +18,12 @@ router.get(
 	boardController.getFavoriteBoards
 );
 
+router.put(
+	'/favorites',
+	tokenHandler.verifyToken,
+	boardController.updateFavoritePosition
+);
+
 router.get(
 	'/:boardId',
 	param('boardId').custom((value) => {
