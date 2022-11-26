@@ -77,7 +77,7 @@ exports.updateBoard = async (req, res) => {
 				user: currentBoard.user,
 				favorite: true,
 				_id: { $ne: boardId },
-			});
+			}).sort('favoritePosition');
 		}
 
 		if (favorite) {
@@ -120,6 +120,51 @@ exports.updateFavoritePosition = async (req, res) => {
 			});
 		}
 		res.status(201).json(boards);
+	} catch (error) {
+		res.status(500).json(error);
+	}
+};
+
+exports.deleteBoard = async (req, res) => {
+	const { boardId } = req.params;
+	console.log(boardId);
+
+	try {
+		const sections = await Section.find({ board: boardId });
+		for (const section of sections) {
+			await Task.deleteMany({ section: section.id });
+		}
+		await Section.deleteMany({ board: boardId });
+
+		const currentBoard = await Board.findById(boardId);
+		console.log(currentBoard);
+
+		if (currentBoard.favorite) {
+			const favorites = await Board.find({
+				user: currentBoard.user,
+				favorite: true,
+				_id: { $ne: boardId },
+			}).sort('favoritePosition');
+
+			for (const key in favorites) {
+				const favorite = favorites[key];
+				await Board.findByIdAndUpdate(favorite._id, {
+					$set: { favoritePosition: key },
+				});
+			}
+		}
+
+		await Board.findByIdAndDelete(boardId);
+
+		const boards = await Board.find().sort('position');
+		console.log(boards);
+
+		for (const key in boards) {
+			const board = boards[key];
+			await Board.findByIdAndUpdate(board._id, { $set: { position: key } });
+		}
+
+		res.status(201).json('Board Deleted');
 	} catch (error) {
 		res.status(500).json(error);
 	}

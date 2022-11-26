@@ -52,4 +52,18 @@ router.put(
 	boardController.updateBoard
 );
 
+router.delete(
+	'/:boardId',
+	param('boardId').custom((value) => {
+		if (!validation.isObjectId(value)) {
+			return Promise.reject('Invalid id');
+		} else {
+			return Promise.resolve();
+		}
+	}),
+	validation.validate,
+	tokenHandler.verifyToken,
+	boardController.deleteBoard
+);
+
 module.exports = router;
