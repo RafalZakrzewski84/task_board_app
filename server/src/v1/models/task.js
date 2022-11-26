@@ -5,19 +5,26 @@ const Schema = mongoose.Schema;
 
 const schemaOptions = require('./modelOptions');
 
-const sectionSchema = Schema(
+const taskSchema = Schema(
 	{
-		board: {
+		section: {
 			type: Schema.Types.ObjectId,
-			ref: 'Board',
+			ref: 'Section',
 			required: true,
 		},
 		title: {
 			type: String,
 			default: '',
 		},
+		content: {
+			type: String,
+			default: '',
+		},
+		position: {
+			type: Number,
+		},
 	},
 	schemaOptions
 );
 
-module.exports = mongoose.model('Section', sectionSchema);
+module.exports = mongoose.model('Task', taskSchema);
