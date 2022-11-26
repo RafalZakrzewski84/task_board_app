@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import {
 	Box,
 	IconButton,
@@ -25,6 +25,7 @@ const TIMEOUT = 500;
 
 const Board = () => {
 	const dispatch = useDispatch();
+	const navigate = useNavigate();
 	const { boardId } = useParams();
 	const [title, setTitle] = useState('');
 	const [description, setDescription] = useState('');
@@ -125,6 +126,32 @@ const Board = () => {
 		}, TIMEOUT);
 	};
 
+	const deleteBoard = async () => {
+		try {
+			await boardsApi.deleteBoard(boardId);
+
+			if (isFavorite) {
+				const newFavorites = favoriteBoards.filter(
+					(favorite) => favorite._id !== boardId
+				);
+				dispatch(setFavorites(newFavorites));
+			}
+
+			const newBoardsCollection = boards.filter(
+				(board) => board._id !== boardId
+			);
+			if (newBoardsCollection.length === 0) {
+				navigate('/boards');
+			} else {
+				navigate(`/boards/${newBoardsCollection[0]._id}`);
+			}
+
+			dispatch(setBoards(newBoardsCollection));
+		} catch (error) {
+			console.log(error);
+		}
+	};
+
 	const updateFavorite = async (e) => {
 		try {
 			await boardsApi.updateBoard(boardId, { favorite: !isFavorite });
@@ -150,7 +177,7 @@ const Board = () => {
 						<StarBorderOutlinedIcon />
 					)}
 				</IconButton>
-				<IconButton variant="outlined" color="error">
+				<IconButton variant="outlined" color="error" onClick={deleteBoard}>
 					<DeleteOutlinedIcon />
 				</IconButton>
 			</Box>
