@@ -1,7 +1,7 @@
 /** @format */
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useParams, useNavigate, Link } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 
 import { ListItem, ListItemButton, Box, Typography } from '@mui/material';
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
@@ -11,7 +11,6 @@ import { setFavorites } from '../../redux/features/favoritesSlice';
 
 const FavoriteBoards = () => {
 	const dispatch = useDispatch();
-	const navigate = useNavigate();
 	const favoriteBoards = useSelector((state) => state.favorites.value);
 	const [activeFavoriteIndex, setActiveFavoriteIndex] = useState(0);
 	const { boardId } = useParams();
@@ -20,14 +19,13 @@ const FavoriteBoards = () => {
 		const getFavoriteBoards = async () => {
 			try {
 				const res = await boardsApi.getFavoriteBoards();
-				console.log(res);
 				dispatch(setFavorites(res));
 			} catch (error) {
 				console.log(error);
 			}
 		};
 		getFavoriteBoards();
-	}, []);
+	}, [dispatch]);
 
 	useEffect(() => {
 		const favoriteIndex = favoriteBoards.findIndex(
@@ -36,8 +34,23 @@ const FavoriteBoards = () => {
 		setActiveFavoriteIndex(favoriteIndex);
 	}, [favoriteBoards, boardId]);
 
-	const onDragEnd = () => {};
+	const onDragEnd = async ({ source, destination }) => {
+		const newFavoriteList = [...favoriteBoards];
+		const [removed] = newFavoriteList.splice(source.index, 1);
+		newFavoriteList.splice(destination.index, 0, removed);
 
+		const activeBoard = newFavoriteList.findIndex(
+			(board) => board._id === boardId
+		);
+		setActiveFavoriteIndex(activeBoard);
+		dispatch(setFavorites(newFavoriteList));
+
+		try {
+			await boardsApi.updateFavoritePosition({ boards: newFavoriteList });
+		} catch (error) {
+			console.log(error);
+		}
+	};
 	return (
 		<>
 			<ListItem>
