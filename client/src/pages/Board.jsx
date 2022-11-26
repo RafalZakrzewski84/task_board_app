@@ -154,7 +154,19 @@ const Board = () => {
 
 	const updateFavorite = async (e) => {
 		try {
-			await boardsApi.updateBoard(boardId, { favorite: !isFavorite });
+			const board = await boardsApi.updateBoard(boardId, {
+				favorite: !isFavorite,
+			});
+			let newFavorites = [...favoriteBoards];
+
+			if (isFavorite) {
+				newFavorites = newFavorites.filter(
+					(favorite) => favorite._id !== boardId
+				);
+			} else {
+				newFavorites.unshift(board);
+			}
+			dispatch(setFavorites(newFavorites));
 			setIsFavorite(!isFavorite);
 		} catch (error) {
 			console.log(error);
